@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #a40000;
+    font-family: Arial, sans-serif;
+}
+
+#startScreen {
+    text-align: center;
+}
+
+#startScreen h1 {
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#startScreen button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#startScreen button:hover {
+    background-color: #45a049;
+}
+
+#gameArea {
+    position: relative;
+}
+
+canvas {
+    background-color: #000;
+    display: block;
+    border: 2px solid #fff;
+}
+
+#gameOverScreen {
+    text-align: center;
+}
+
+#gameOverScreen h2 {
+    font-size: 30px;
+    color: #333;
+}
+
+#gameOverScreen p {
+    font-size: 20px;
+}
+
+#gameOverScreen button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#gameOverScreen button:hover {
+    background-color: #45a049;
+}
+
+/* Estilo para a pontuação */
+.score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 20px;
+    z-index: 1; /* Garante que a pontuação fique sobre o canvas */
+}
+s
