@@ -6,16 +6,17 @@ const eatSound = new Audio('comer.mp3');  // Som ao comer a comida
 const gameOverSound = new Audio('gameover.mp3');  // Som ao finalizar o jogo
 
 // Configurações do Jogo
-const gridSize = 20; 
-const canvasSize = 400; 
-const initialSnakeLength = 5; 
+const gridSize = 20;
+const canvasSize = 400;
+const initialSnakeLength = 5;
 let snake = [];
 let direction = 'right';
 let food = { x: 0, y: 0 };
-let score = 0; 
-let gameSpeed = 100; 
+let score = 0;
+let gameSpeed = 100;
 let gameInterval;
 let difficultyInterval;
+let highScores = [];
 
 // Função para iniciar o jogo
 function initGame() {
@@ -133,9 +134,46 @@ function updateScore() {
 function gameOver() {
     gameOverSound.play(); // Som de Game Over
     clearInterval(gameInterval);
+
+    // Adiciona a pontuação ao ranking
+    addToRanking(score);
+
     document.getElementById('gameArea').style.display = 'none';
     document.getElementById('gameOverScreen').style.display = 'block';
     document.getElementById('finalScore').innerText = score;
+
+    // Atualiza o ranking
+    displayRanking();
+}
+
+// Função para adicionar pontuação ao ranking
+function addToRanking(newScore) {
+    // Recupera o ranking do localStorage
+    let ranking = JSON.parse(localStorage.getItem('ranking')) || [];
+
+    // Adiciona a nova pontuação
+    ranking.push(newScore);
+    ranking.sort((a, b) => b - a); // Ordena as pontuações em ordem decrescente
+    ranking = ranking.slice(0, 5); // Mantém apenas as 5 melhores
+
+    // Salva novamente no localStorage
+    localStorage.setItem('ranking', JSON.stringify(ranking));
+}
+
+// Função para exibir o ranking
+function displayRanking() {
+    const rankingList = document.getElementById('rankingList');
+    rankingList.innerHTML = ''; // Limpa a lista
+
+    // Recupera o ranking do localStorage
+    const ranking = JSON.parse(localStorage.getItem('ranking')) || [];
+
+    // Exibe as melhores pontuações
+    ranking.forEach(score => {
+        const li = document.createElement('li');
+        li.textContent = score;
+        rankingList.appendChild(li);
+    });
 }
 
 // Reinicia o jogo ao clicar no botão
@@ -144,4 +182,9 @@ document.getElementById('restartBtn').addEventListener('click', () => {
 });
 
 // Inicia o jogo ao clicar no botão
-document.getElementById('startBtn').addEventListener('click', initGame);
+document.getElementById('startBtn').addEventListener('click', () => {
+    initGame();
+    displayRanking(); // Exibe o ranking ao iniciar o jogo
+});
+
+// Exibe o ranking
