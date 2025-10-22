@@ -114,17 +114,6 @@ document.addEventListener('keydown', event => {
     else if (event.key === 'ArrowDown' && direction !== 'up') direction = 'down';
     else if (event.key === 'ArrowLeft' && direction !== 'right') direction = 'left';
     else if (event.key === 'ArrowRight' && direction !== 'left') direction = 'right';
-
-    // Ajuste de velocidade manual
-    else if (event.key === 'a') {
-        gameSpeed = Math.min(200, gameSpeed + 10);
-        clearInterval(gameInterval);
-        gameInterval = setInterval(gameLoop, gameSpeed);
-    } else if (event.key === 'd') {
-        gameSpeed = Math.max(50, gameSpeed - 10);
-        clearInterval(gameInterval);
-        gameInterval = setInterval(gameLoop, gameSpeed);
-    }
 });
 
 // Função de Game Over
@@ -132,27 +121,30 @@ function gameOver() {
     gameOverSound.play();
     clearInterval(gameInterval);
 
-    addToRanking(score);
+    // Salva no ranking
+    saveToRanking(score);
+
+    // Exibe o ranking
     displayRanking();
 
     // Troca de telas
     document.getElementById('gameArea').style.display = 'none';
-    document.getElementById('startScreen').style.display = 'block';
+    document.getElementById('gameOverScreen').style.display = 'block';
 }
 
-// Adiciona pontuação ao ranking local
-function addToRanking(newScore) {
+// Função para salvar o ranking no JSON
+function saveToRanking(newScore) {
     let ranking = JSON.parse(localStorage.getItem('ranking')) || [];
     ranking.push(newScore);
-    ranking.sort((a, b) => b - a);
-    ranking = ranking.slice(0, 5); // top 5
+    ranking.sort((a, b) => b - a);  // Ordena do maior para o menor
+    ranking = ranking.slice(0, 5);  // Mantém apenas os 5 melhores
     localStorage.setItem('ranking', JSON.stringify(ranking));
 }
 
-// Exibe ranking na tela de início
+// Função para exibir o ranking
 function displayRanking() {
     const rankingList = document.getElementById('rankingList');
-    rankingList.innerHTML = ''; // Limpa
+    rankingList.innerHTML = '';  // Limpa a lista
 
     const ranking = JSON.parse(localStorage.getItem('ranking')) || [];
     ranking.forEach((score, index) => {
@@ -166,6 +158,4 @@ function displayRanking() {
 document.getElementById('startBtn').addEventListener('click', initGame);
 document.getElementById('restartBtn').addEventListener('click', initGame);
 
-// Mostra ranking ao abrir a página
-window.addEventListener('load', displayRanking);
-
+// Most
